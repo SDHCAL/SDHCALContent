@@ -1,2 +1,2 @@
 # SDHCALContent
-Algorithm of Particle Reconstruction for ILC - implementation with PandoraSDK
+Plugins and tools for SDHCAL

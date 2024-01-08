@@ -1,0 +1,7 @@
+SDHCALContentConfig.cmake
+SDHCALContentConfigVersion.cmake
+build/
+cmake/CMakeCache.txt
+cmake/CMakeFiles/
+lib/
+src/.vscode/
