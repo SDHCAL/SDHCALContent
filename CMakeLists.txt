@@ -43,8 +43,7 @@ MESSAGE( STATUS "INSTALL_DOC : ${INSTALL_DOC}" )
 INCLUDE_DIRECTORIES( ./include )
 
 SET( INPUT_DIRS 
-     SDHCALApi SDHCALObjects SDHCALCheating SDHCALClustering SDHCALHelpers SDHCALMonitoring SDHCALPfoConstruction SDHCALParticleId 
-     SDHCALPlugins SDHCALReclustering SDHCALTools SDHCALTopologicalAssociation SDHCALTrackClusterAssociation SDHCALUtility )
+    SDHCALObjects SDHCALHelpers SDHCALPlugins )
 
 FILE(GLOB INPUT_DIR_INCS ./include/*.h)
 SOURCE_GROUP("Header files" FILES ${INPUT_DIR_INCS} )
