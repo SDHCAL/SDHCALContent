@@ -374,9 +374,9 @@ namespace sdhcal_content
     if(correctedEnergy < m_lowEnergyCut)
       return pandora::STATUS_CODE_SUCCESS;
 
-    unsigned int startingPseudoLayer(std::numeric_limits<unsigned int>::max());
+    /* unsigned int startingPseudoLayer(std::numeric_limits<unsigned int>::max());
  
-    /* const pandora::StatusCode statusCode(ParticleIdHelper::GetStartingPseudoLayer(this->GetPandora(), pCluster, ParticleIdHelper::StartingLayerSettings(), startingPseudoLayer));
+    const pandora::StatusCode statusCode(ParticleIdHelper::GetStartingPseudoLayer(this->GetPandora(), pCluster, ParticleIdHelper::StartingLayerSettings(), startingPseudoLayer));
 
     // do not apply energy corrections if starting layer not found
     if(pandora::STATUS_CODE_SUCCESS != statusCode)
@@ -610,9 +610,9 @@ namespace sdhcal_content
     if(correctedEnergy < m_lowEnergyCut)
       return pandora::STATUS_CODE_SUCCESS;
 
-    unsigned int startingPseudoLayer(std::numeric_limits<unsigned int>::max());
+    /* unsigned int startingPseudoLayer(std::numeric_limits<unsigned int>::max());
  
-    /* const pandora::StatusCode statusCode(ParticleIdHelper::GetStartingPseudoLayer(this->GetPandora(), pCluster, ParticleIdHelper::StartingLayerSettings(), startingPseudoLayer));
+    const pandora::StatusCode statusCode(ParticleIdHelper::GetStartingPseudoLayer(this->GetPandora(), pCluster, ParticleIdHelper::StartingLayerSettings(), startingPseudoLayer));
 
     // do not apply energy corrections if starting layer not found
     if(pandora::STATUS_CODE_SUCCESS != statusCode)
