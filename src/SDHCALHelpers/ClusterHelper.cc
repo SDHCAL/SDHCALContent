@@ -29,11 +29,6 @@
 #include "Pandora/AlgorithmHeaders.h"
 
 #include "SDHCALHelpers/ClusterHelper.h"
-#include "SDHCALApi/SDHCALContentApi.h"
-//#include "SDHCALHelpers/CaloHitHelper.h"
-//#include "SDHCALHelpers/GeometryHelper.h"
-//#include "SDHCALHelpers/ReclusterHelper.h"
-//#include "SDHCALHelpers/CaloHitNeighborSearchHelper.h"
 
 #include "TMatrixT.h"
 #include "TMatrixDEigen.h"

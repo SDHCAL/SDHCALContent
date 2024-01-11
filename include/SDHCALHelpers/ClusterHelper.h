@@ -31,8 +31,6 @@
 
 #include "Pandora/PandoraInternal.h"
 #include "Pandora/PandoraInputTypes.h"
-#include "SDHCALApi/SDHCALInputTypes.h"
-#include "Helpers/ClusterFitHelper.h"
 
 namespace sdhcal_content
 {
