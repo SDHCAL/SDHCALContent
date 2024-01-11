@@ -75,9 +75,6 @@ inline pandora::StatusCode SDHCALContent::RegisterEnergyCorrections(const pandor
       "BarrelGapEnergyFunction", pandora::HADRONIC, new sdhcal_content::BarrelGapEnergyFunction()));
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
-      "ThetaEnergyFunction", pandora::HADRONIC, new sdhcal_content::ThetaEnergyFunction()));
-
-  PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
       "ThetaNHitFunction", pandora::HADRONIC, new sdhcal_content::ThetaNHitFunction()));
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
