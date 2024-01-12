@@ -59,7 +59,7 @@ public:
 
 inline pandora::StatusCode SDHCALContent::RegisterEnergyCorrections(const pandora::Pandora &pandora)
 {
-  PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
+  /* PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
       "SdhcalQuadraticEnergyFunction", pandora::HADRONIC, new sdhcal_content::SdhcalQuadraticEnergyFunction()));
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
@@ -72,16 +72,16 @@ inline pandora::StatusCode SDHCALContent::RegisterEnergyCorrections(const pandor
       "AnalogicEnergyFunction", pandora::ELECTROMAGNETIC, new sdhcal_content::AnalogicEnergyFunction()));
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
-      "BarrelGapEnergyFunction", pandora::HADRONIC, new sdhcal_content::BarrelGapEnergyFunction()));
+      "BarrelGapEnergyFunction", pandora::HADRONIC, new sdhcal_content::BarrelGapEnergyFunction())); */
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
-      "ThetaNHitFunction", pandora::HADRONIC, new sdhcal_content::ThetaNHitFunction()));
+      "ThetaNHitFunction", pandora::HADRONIC, new sdhcal_content::ThetaNHitFunction));
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
-      "PhiNHitFunction", pandora::HADRONIC, new sdhcal_content::PhiNHitFunction()));
+      "PhiNHitFunction", pandora::HADRONIC, new sdhcal_content::PhiNHitFunction));
 
-  PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
-      "CleanClusters", pandora::HADRONIC, new sdhcal_content::CleanCluster()));
+  /* PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
+      "CleanClusters", pandora::HADRONIC, new sdhcal_content::CleanCluster())); */
 
   return pandora::STATUS_CODE_SUCCESS;
 }

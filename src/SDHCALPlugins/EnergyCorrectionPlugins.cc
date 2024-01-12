@@ -28,7 +28,6 @@
 #include <fstream>
 #include "SDHCALPlugins/EnergyCorrectionPlugins.h"
 #include "SDHCALHelpers/ClusterHelper.h"
-//#include "SDHCALPlugins/ParticleIdPlugins.h"
 
 #include "Pandora/AlgorithmHeaders.h"
 
