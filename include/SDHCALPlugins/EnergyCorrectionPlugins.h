@@ -212,24 +212,22 @@ namespace sdhcal_content
 
   private:
     float                       m_lowEnergyCut;
-
     pandora::FloatVector                m_sdhcalThresholds;             ///< The sdhcal threshold values
-    // pandora::FloatVector                m_energyConstantParameter;    ///< The energy constant parameters
   };
 
   //------------------------------------------------------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------------------------------------------------------
 
   /**
-   *  @brief  PhiNHitFunction class
+   *  @brief  PhiNHitTesla class
    */
-  class PhiNHitFunction : public pandora::EnergyCorrectionPlugin
+  class PhiNHitTesla : public pandora::EnergyCorrectionPlugin
   {
   public:
     /**
      *  @brief  Default constructor
      */
-    PhiNHitFunction();
+    PhiNHitTesla();
 
     /**
      *  @brief  Make energy correction on this given cluster
@@ -263,9 +261,56 @@ namespace sdhcal_content
 
   private:
     float                       m_lowEnergyCut;
-
     pandora::FloatVector                m_sdhcalThresholds;             ///< The sdhcal threshold values
-    // pandora::FloatVector                m_energyConstantParameter;    ///< The energy constant parameters
+  };
+
+  //------------------------------------------------------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------------------------------------------------------
+
+  /**
+   *  @brief  PhiNHitVideau class
+   */
+  class PhiNHitVideau : public pandora::EnergyCorrectionPlugin
+  {
+  public:
+    /**
+     *  @brief  Default constructor
+     */
+    PhiNHitVideau();
+
+    /**
+     *  @brief  Make energy correction on this given cluster
+     *
+     *  @param  pCluster the cluster address to correct the energy
+     *  @param  correctedEnergy the energy to correct
+     */
+    pandora::StatusCode MakeEnergyCorrections(const pandora::Cluster *const pCluster, float &correctedEnergy) const;
+
+    /**
+     *  @brief  Read settings from the xml handle
+     *
+     *  @param  xmlHandle the xml handle to read settings from
+     */
+    pandora::StatusCode ReadSettings(const pandora::TiXmlHandle xmlHandle);
+
+  private:
+    /**
+     *  @brief  Get cos phi with respect to y axis in the XY-plane
+     */
+    float GetCosPhi(const pandora::Cluster *const pCluster) const;
+
+    /**
+     *  @brief  Get the corrected number of hits
+     *
+     *  @param  The number of hits to correct
+     *  @param  The cluster cos phi
+     */
+    float GetCorrectedHitNumber(int nHit, float cosPhi) const;
+
+
+  private:
+    float                       m_lowEnergyCut;
+    pandora::FloatVector                m_sdhcalThresholds;             ///< The sdhcal threshold values
   };
 
   //------------------------------------------------------------------------------------------------------------------------------------------

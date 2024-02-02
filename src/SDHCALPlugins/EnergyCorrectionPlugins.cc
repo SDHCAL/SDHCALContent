@@ -373,14 +373,6 @@ namespace sdhcal_content
     if(correctedEnergy < m_lowEnergyCut)
       return pandora::STATUS_CODE_SUCCESS;
 
-    /* unsigned int startingPseudoLayer(std::numeric_limits<unsigned int>::max());
- 
-    const pandora::StatusCode statusCode(ParticleIdHelper::GetStartingPseudoLayer(this->GetPandora(), pCluster, ParticleIdHelper::StartingLayerSettings(), startingPseudoLayer));
-
-    // do not apply energy corrections if starting layer not found
-    if(pandora::STATUS_CODE_SUCCESS != statusCode)
-      return pandora::STATUS_CODE_SUCCESS; */
-
     pandora::CaloHitList clusterCaloHitList;
     pCluster->GetOrderedCaloHitList().FillCaloHitList(clusterCaloHitList);
 
@@ -529,61 +521,14 @@ namespace sdhcal_content
       return pandora::STATUS_CODE_INVALID_PARAMETER;
 
     return pandora::STATUS_CODE_SUCCESS;
-
-    /* pandora::FloatVector energyConstantParameter;
-    pandora::StatusCode statusCode = pandora::XmlHelper::ReadVectorOfValues(xmlHandle,
-        "EnergyConstantParameter", energyConstantParameter);
-
-    if(statusCode == pandora::STATUS_CODE_SUCCESS)
-    {
-      m_energyConstantParameter = energyConstantParameter;
-    }
-    else if(statusCode != pandora::STATUS_CODE_NOT_FOUND)
-    {
-      return statusCode;
-    }
-
-    if(9 != m_energyConstantParameter.size())
-      return pandora::STATUS_CODE_INVALID_PARAMETER;
-
-    pandora::FloatVector sdhcalThresholds;
-    statusCode = pandora::XmlHelper::ReadVectorOfValues(xmlHandle,
-        "SdhcalThresholds", sdhcalThresholds);
-
-    if(statusCode == pandora::STATUS_CODE_SUCCESS)
-    {
-      m_sdhcalThresholds = sdhcalThresholds;
-    }
-    else if(statusCode != pandora::STATUS_CODE_NOT_FOUND)
-    {
-      return statusCode;
-    }
-
-    if(3 != m_sdhcalThresholds.size())
-      return pandora::STATUS_CODE_INVALID_PARAMETER;
-
-    std::cout << "---------------------------------------------------------------- Return SUCCESS ::: ReadSettings() \n"; */
-    return pandora::STATUS_CODE_SUCCESS;
   }
 
   //------------------------------------------------------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------------------------------------------------------
 
-  PhiNHitFunction::PhiNHitFunction() :
+  PhiNHitTesla::PhiNHitTesla() :
        m_lowEnergyCut(3.f)
   {
-        // std::cout << "--------------------------- INIT m_energy \n";
-        /* m_energyConstantParameters.push_back(0.0385315);
-        m_energyConstantParameters.push_back(4.22584e-05);
-        m_energyConstantParameters.push_back(-7.54657e-09);
-        m_energyConstantParameters.push_back(0.0784297);
-        m_energyConstantParameters.push_back(-5.69439e-05);
-        m_energyConstantParameters.push_back(-4.95924e-08);
-        m_energyConstantParameters.push_back(0.127212);
-        m_energyConstantParameters.push_back(4.56414e-05);
-        m_energyConstantParameters.push_back(1.41142e-08); */
-        //m_energyConstantParameter.resize(9);
-
         m_sdhcalThresholds.push_back(1);
         m_sdhcalThresholds.push_back(2);
         m_sdhcalThresholds.push_back(3);
@@ -591,7 +536,7 @@ namespace sdhcal_content
 
   //------------------------------------------------------------------------------------------------------------------------------------------
 
-  pandora::StatusCode PhiNHitFunction::MakeEnergyCorrections(const pandora::Cluster *const pCluster, float &correctedEnergy) const
+  pandora::StatusCode PhiNHitTesla::MakeEnergyCorrections(const pandora::Cluster *const pCluster, float &correctedEnergy) const
   {
     unsigned int NHadronicHit1 = 0;
     unsigned int NHadronicHit2 = 0;
@@ -603,19 +548,14 @@ namespace sdhcal_content
 
     float initialBarrelHadronic = 0;
 
+    std::ofstream file("/scratch/pasquier/HitLayer.txt", std::ios::app);
+    file << "Début d'un nouveau cluster : " << std::endl;
+
     if(pCluster->GetNCaloHits() == 0)
       return pandora::STATUS_CODE_SUCCESS;
 
     if(correctedEnergy < m_lowEnergyCut)
       return pandora::STATUS_CODE_SUCCESS;
-
-    /* unsigned int startingPseudoLayer(std::numeric_limits<unsigned int>::max());
- 
-    const pandora::StatusCode statusCode(ParticleIdHelper::GetStartingPseudoLayer(this->GetPandora(), pCluster, ParticleIdHelper::StartingLayerSettings(), startingPseudoLayer));
-
-    // do not apply energy corrections if starting layer not found
-    if(pandora::STATUS_CODE_SUCCESS != statusCode)
-      return pandora::STATUS_CODE_SUCCESS; */
 
     pandora::CaloHitList clusterCaloHitList;
     pCluster->GetOrderedCaloHitList().FillCaloHitList(clusterCaloHitList);
@@ -631,6 +571,7 @@ namespace sdhcal_content
         {
           if(pCaloHit->GetHitRegion() == pandora::BARREL)
           {
+            file << "Layer : " <<pCaloHit->GetLayer() << "; Pseudo layer : " << pCaloHit->GetPseudoLayer() << std::endl;
             if(fabs(m_sdhcalThresholds.at(0) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             { 
               barrelNHadronicHit1++;
@@ -675,14 +616,14 @@ namespace sdhcal_content
 
     //outputFile << "Energy after : " << correctedEnergy <<  " ; " << std::endl;
 
-    //outputFile.close();
+    file.close();
 
     return pandora::STATUS_CODE_SUCCESS;
   }
 
   //------------------------------------------------------------------------------------------------------------------------------------------
 
-  float PhiNHitFunction::GetCosPhi(const pandora::Cluster *const pCluster) const
+  float PhiNHitTesla::GetCosPhi(const pandora::Cluster *const pCluster) const
   {
     pandora::CartesianVector centroid(0.f, 0.f, 0.f);
     pandora::CartesianVector zAxis(0.f, 0.f, 1.f);
@@ -700,7 +641,7 @@ namespace sdhcal_content
 
   //------------------------------------------------------------------------------------------------------------------------------------------
 
-  float PhiNHitFunction::GetCorrectedHitNumber(int nHit, float cosPhi) const
+  float PhiNHitTesla::GetCorrectedHitNumber(int nHit, float cosPhi) const
   {
 	  //std::cout << "nHit: " << nHit << ", cosTheta: " << cosTheta << std::endl;
     return nHit * (1 / (cosPhi));
@@ -708,7 +649,7 @@ namespace sdhcal_content
 
   //------------------------------------------------------------------------------------------------------------------------------------------
 
-  pandora::StatusCode PhiNHitFunction::ReadSettings(const pandora::TiXmlHandle xmlHandle)
+  pandora::StatusCode PhiNHitTesla::ReadSettings(const pandora::TiXmlHandle xmlHandle)
   {
     PANDORA_RETURN_RESULT_IF_AND_IF(pandora::STATUS_CODE_SUCCESS, pandora::STATUS_CODE_NOT_FOUND, !=, pandora::XmlHelper::ReadValue(xmlHandle,
         "LowEnergyCut", m_lowEnergyCut));
@@ -730,25 +671,160 @@ namespace sdhcal_content
       return pandora::STATUS_CODE_INVALID_PARAMETER;
 
     return pandora::STATUS_CODE_SUCCESS;
+  }
 
-    /* pandora::FloatVector energyConstantParameter;
-    pandora::StatusCode statusCode = pandora::XmlHelper::ReadVectorOfValues(xmlHandle,
-        "EnergyConstantParameter", energyConstantParameter);
+  //------------------------------------------------------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------------------------------------------------------
 
-    if(statusCode == pandora::STATUS_CODE_SUCCESS)
+  PhiNHitVideau::PhiNHitVideau() :
+       m_lowEnergyCut(3.f)
+  {
+        m_sdhcalThresholds.push_back(1);
+        m_sdhcalThresholds.push_back(2);
+        m_sdhcalThresholds.push_back(3);
+  }
+
+  //------------------------------------------------------------------------------------------------------------------------------------------
+
+  pandora::StatusCode PhiNHitVideau::MakeEnergyCorrections(const pandora::Cluster *const pCluster, float &correctedEnergy) const
+  {
+    unsigned int NHadronicHit1 = 0;
+    unsigned int NHadronicHit2 = 0;
+    unsigned int NHadronicHit3 = 0;
+  
+    unsigned int firstNHadronicHit1 = 0; //For the hits contained in the first calo block in Videau geometry
+    unsigned int firstNHadronicHit2 = 0;
+    unsigned int firstNHadronicHit3 = 0; 
+
+    unsigned int secondNHadronicHit1 = 0; //For the hits contained in the second calo block in Videau geometry
+    unsigned int secondNHadronicHit2 = 0;
+    unsigned int secondNHadronicHit3 = 0; 
+
+    float initialBarrelHadronic = 0;
+
+    std::ofstream file("/scratch/pasquier/HitLayer.txt", std::ios::app);
+    file << "Début d'un nouveau cluster : " << std::endl;
+
+    if(pCluster->GetNCaloHits() == 0)
+      return pandora::STATUS_CODE_SUCCESS;
+
+    if(correctedEnergy < m_lowEnergyCut)
+      return pandora::STATUS_CODE_SUCCESS;
+
+    pandora::CaloHitList clusterCaloHitList;
+    pCluster->GetOrderedCaloHitList().FillCaloHitList(clusterCaloHitList);
+
+    bool noShowerHit(true);
+
+    for(pandora::CaloHitList::const_iterator iter = clusterCaloHitList.begin(), endIter = clusterCaloHitList.end() ;
+        endIter != iter ; ++iter)
     {
-      m_energyConstantParameter = energyConstantParameter;
-    }
-    else if(statusCode != pandora::STATUS_CODE_NOT_FOUND)
-    {
-      return statusCode;
+      const pandora::CaloHit *const pCaloHit(*iter);
+
+      if(pCaloHit->GetHitType() == pandora::HCAL)
+        {
+          if(pCaloHit->GetHitRegion() == pandora::BARREL)
+          {
+            file << "Layer : " <<pCaloHit->GetLayer()+30 << "; Pseudo layer : " << pCaloHit->GetPseudoLayer() << std::endl;
+            if(fabs(m_sdhcalThresholds.at(0) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
+            { 
+              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              if(pCaloHit->GetPseudoLayer() == (pCaloHit->GetLayer()+30)) //If pseudolayer!=layer+30, means the hit is in the other block
+                firstNHadronicHit1++;
+              else
+                secondNHadronicHit1++;
+            }
+            else if(fabs(m_sdhcalThresholds.at(1) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
+            {
+              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              if(pCaloHit->GetPseudoLayer() == (pCaloHit->GetLayer()+30)) //If pseudolayer!=layer+30, means the hit is in the other block
+                firstNHadronicHit2++;
+              else
+                secondNHadronicHit2++;
+            }
+            else if(fabs(m_sdhcalThresholds.at(2) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
+            {
+              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              if(pCaloHit->GetPseudoLayer() == (pCaloHit->GetLayer()+30)) //If pseudolayer!=layer+30, means the hit is in the other block
+                firstNHadronicHit3++;
+              else
+                secondNHadronicHit3++;
+            }
+          }
+          noShowerHit = false;
+        }
     }
 
-    if(9 != m_energyConstantParameter.size())
-      return pandora::STATUS_CODE_INVALID_PARAMETER;
+    if(noShowerHit)
+      return pandora::STATUS_CODE_SUCCESS;
+
+    correctedEnergy-=initialBarrelHadronic; // Pull the initial energy of the HCAL hits from the total energy to correct
+
+    /* std::cout << "NHadronicHit : " << NHadronicHit << std::endl;
+    std::cout << "barrelNHadronicHit1 : " << barrelNHadronicHit1 << std::endl;
+    std::cout << "barrelNHadronicHit2 : " << barrelNHadronicHit2 << std::endl;
+    std::cout << "barrelNHadronicHit3 : " << barrelNHadronicHit3 << std::endl; */
+
+    //Parameters for geometric phi correction
+    const float clusterCosPhi(this->GetCosPhi(pCluster)); //Cos phi for the fisrt calo block
+
+    //Angle for the second calo block
+    const float PhiPrime(M_PI_4 - std::acos(this->GetCosPhi(pCluster))); //PhiPrime angle with respect to the second calo block
+
+    //CosPhiPrime
+    const float clusterCosPhiPrime(fabs(std::cos(PhiPrime))); //Cos phi for the fisrt calo block
+
+    //Sum the corrected number of hits for each tresholds
+    NHadronicHit1 = this->GetCorrectedHitNumber(firstNHadronicHit1, clusterCosPhi) + this->GetCorrectedHitNumber(secondNHadronicHit1, clusterCosPhiPrime);
+    NHadronicHit2 = this->GetCorrectedHitNumber(firstNHadronicHit2, clusterCosPhi) + this->GetCorrectedHitNumber(secondNHadronicHit2, clusterCosPhiPrime);
+    NHadronicHit3 = this->GetCorrectedHitNumber(firstNHadronicHit3, clusterCosPhi) + this->GetCorrectedHitNumber(secondNHadronicHit3, clusterCosPhiPrime);
+
+    const float correctedBarrelEnergy(NHadronicHit1*m_sdhcalThresholds.at(0) + NHadronicHit2*m_sdhcalThresholds.at(1) + NHadronicHit3*m_sdhcalThresholds.at(2)); //New barrel hadronic energy
+
+    correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
+
+    //outputFile << "Energy after : " << correctedEnergy <<  " ; " << std::endl;
+
+    file.close();
+
+    return pandora::STATUS_CODE_SUCCESS;
+  }
+
+  //------------------------------------------------------------------------------------------------------------------------------------------
+
+  float PhiNHitVideau::GetCosPhi(const pandora::Cluster *const pCluster) const
+  {
+    pandora::CartesianVector centroid(0.f, 0.f, 0.f);
+    pandora::CartesianVector zAxis(0.f, 0.f, 1.f);
+  
+    PANDORA_THROW_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, ClusterHelper::GetCentroid(pCluster, centroid));
+    pandora::CartesianVector projectedCentroid(zAxis.GetCrossProduct(centroid.GetCrossProduct(zAxis))); //Project the postion vector of the cluster in the XY-plane 
+    float phiAngle = projectedCentroid.GetOpeningAngle(pandora::CartesianVector(0.f, 1.f, 0.f)); //Returns an angle between 0 and PI in rad
+    while(phiAngle>M_PI_4/2) //Substract PI/4 until the angle is between -PI/8 and PI/8 rad
+    {
+        phiAngle-=M_PI_4;
+    }
+
+    return fabs(std::cos(phiAngle)); 
+  }
+
+  //------------------------------------------------------------------------------------------------------------------------------------------
+
+  float PhiNHitVideau::GetCorrectedHitNumber(int nHit, float cosPhi) const
+  {
+	  //std::cout << "nHit: " << nHit << ", cosTheta: " << cosTheta << std::endl;
+    return nHit * (1 / (cosPhi));
+  }
+
+  //------------------------------------------------------------------------------------------------------------------------------------------
+
+  pandora::StatusCode PhiNHitVideau::ReadSettings(const pandora::TiXmlHandle xmlHandle)
+  {
+    PANDORA_RETURN_RESULT_IF_AND_IF(pandora::STATUS_CODE_SUCCESS, pandora::STATUS_CODE_NOT_FOUND, !=, pandora::XmlHelper::ReadValue(xmlHandle,
+        "LowEnergyCut", m_lowEnergyCut));
 
     pandora::FloatVector sdhcalThresholds;
-    statusCode = pandora::XmlHelper::ReadVectorOfValues(xmlHandle,
+    pandora::StatusCode statusCode = pandora::XmlHelper::ReadVectorOfValues(xmlHandle,
         "SdhcalThresholds", sdhcalThresholds);
 
     if(statusCode == pandora::STATUS_CODE_SUCCESS)
@@ -763,7 +839,6 @@ namespace sdhcal_content
     if(3 != m_sdhcalThresholds.size())
       return pandora::STATUS_CODE_INVALID_PARAMETER;
 
-    std::cout << "---------------------------------------------------------------- Return SUCCESS ::: ReadSettings() \n"; */
     return pandora::STATUS_CODE_SUCCESS;
   }
 

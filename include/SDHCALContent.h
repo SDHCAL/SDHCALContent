@@ -78,10 +78,13 @@ inline pandora::StatusCode SDHCALContent::RegisterEnergyCorrections(const pandor
       "ThetaNHitFunction", pandora::HADRONIC, new sdhcal_content::ThetaNHitFunction));
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
-      "PhiNHitFunction", pandora::HADRONIC, new sdhcal_content::PhiNHitFunction));
+      "PhiNHitTesla", pandora::HADRONIC, new sdhcal_content::PhiNHitTesla));
 
-  /* PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
-      "CleanClusters", pandora::HADRONIC, new sdhcal_content::CleanCluster())); */
+  PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
+      "PhiNHitVideau", pandora::HADRONIC, new sdhcal_content::PhiNHitVideau));
+
+  PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
+      "SDHCALCleanClusters", pandora::HADRONIC, new sdhcal_content::CleanCluster));
 
   return pandora::STATUS_CODE_SUCCESS;
 }
