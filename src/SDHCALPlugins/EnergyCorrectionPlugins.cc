@@ -390,17 +390,20 @@ namespace sdhcal_content
             if(fabs(m_sdhcalThresholds.at(0) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
               barrelNHadronicHit1++;
-              initialHadronic+=pCaloHit->GetInputEnergy();
+              //initialHadronic+=pCaloHit->GetInputEnergy();
+              initialHadronic+=0.0367023;
             }
             else if(fabs(m_sdhcalThresholds.at(1) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
               barrelNHadronicHit2++;
-              initialHadronic+=pCaloHit->GetInputEnergy();
+              //initialHadronic+=pCaloHit->GetInputEnergy();
+              initialHadronic+=0.0745279;
             }
             else if(fabs(m_sdhcalThresholds.at(2) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
               barrelNHadronicHit3++;
-              initialHadronic+=pCaloHit->GetInputEnergy();
+              //initialHadronic+=pCaloHit->GetInputEnergy();
+              initialHadronic+=0.363042;
             }
           }
           else if(pCaloHit->GetHitRegion() == pandora::ENDCAP)
@@ -408,17 +411,20 @@ namespace sdhcal_content
             if(fabs(m_sdhcalThresholds.at(0) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             { 
               endcapNHadronicHit1++;
-              initialHadronic+=pCaloHit->GetInputEnergy();
+              //initialHadronic+=pCaloHit->GetInputEnergy();
+              initialHadronic+=0.0367023;
             }
             else if(fabs(m_sdhcalThresholds.at(1) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
               endcapNHadronicHit2++;
-              initialHadronic+=pCaloHit->GetInputEnergy();
+              //initialHadronic+=pCaloHit->GetInputEnergy();
+              initialHadronic+=0.0745279;
             }
             else if(fabs(m_sdhcalThresholds.at(2) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
               endcapNHadronicHit3++;
-              initialHadronic+=pCaloHit->GetInputEnergy();
+              //initialHadronic+=pCaloHit->GetInputEnergy();
+              initialHadronic+=0.363042;
             }
           }
           noShowerHit = false;
@@ -472,9 +478,18 @@ namespace sdhcal_content
     const float gamma(m_energyConstantParameters.at(6) + m_energyConstantParameters.at(7)*NHadronicHit + m_energyConstantParameters.at(8)*NHadronicHit*NHadronicHit);
     const float hadEnergy(NHadronicHit1*alpha + NHadronicHit2*beta + NHadronicHit3*gamma); */
 
-    const float hadEnergy(NHadronicHit1*m_sdhcalThresholds.at(0) + NHadronicHit2*m_sdhcalThresholds.at(1) + NHadronicHit3*m_sdhcalThresholds.at(2)); //New linear hadronic energy 
+    if(m_sdhcalThresholds.at(0) != 1) //Test if we use semidigital thresholds
+    {
+      const float hadEnergy(NHadronicHit1*m_sdhcalThresholds.at(0) + NHadronicHit2*m_sdhcalThresholds.at(1) + NHadronicHit3*m_sdhcalThresholds.at(2)); //New barrel hadronic energy
+      correctedEnergy += hadEnergy; //Compute the corrected energy
+    }
+    else
+    {
+      const float hadEnergy(NHadronicHit1*0.0367023 + NHadronicHit2*0.0745279 + NHadronicHit3*0.363042);
+      correctedEnergy += hadEnergy; //Compute the corrected energy
+    }
 
-    correctedEnergy += hadEnergy; //Compute the corrected energy
+    
 
     return pandora::STATUS_CODE_SUCCESS;
   }
@@ -575,17 +590,20 @@ namespace sdhcal_content
             if(fabs(m_sdhcalThresholds.at(0) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             { 
               barrelNHadronicHit1++;
-              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              //initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              initialBarrelHadronic+=0.0367023;
             }
             else if(fabs(m_sdhcalThresholds.at(1) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
               barrelNHadronicHit2++;
-              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              //initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              initialBarrelHadronic+=0.0745279;
             }
             else if(fabs(m_sdhcalThresholds.at(2) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
               barrelNHadronicHit3++;
-              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              //initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              initialBarrelHadronic+=0.363042;
             }
           }
           noShowerHit = false;
@@ -610,9 +628,16 @@ namespace sdhcal_content
     NHadronicHit2 = this->GetCorrectedHitNumber(barrelNHadronicHit2, clusterCosPhi);
     NHadronicHit3 = this->GetCorrectedHitNumber(barrelNHadronicHit3, clusterCosPhi);
 
-    const float correctedBarrelEnergy(NHadronicHit1*m_sdhcalThresholds.at(0) + NHadronicHit2*m_sdhcalThresholds.at(1) + NHadronicHit3*m_sdhcalThresholds.at(2)); //New barrel hadronic energy
-
-    correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
+    if(m_sdhcalThresholds.at(0) != 1) //Test if we use semidigital thresholds
+    {
+      const float correctedBarrelEnergy(NHadronicHit1*m_sdhcalThresholds.at(0) + NHadronicHit2*m_sdhcalThresholds.at(1) + NHadronicHit3*m_sdhcalThresholds.at(2)); //New barrel hadronic energy
+      correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
+    }
+    else
+    {
+      const float correctedBarrelEnergy(NHadronicHit1*0.0367023 + NHadronicHit2*0.0745279 + NHadronicHit3*0.363042);
+      correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
+    }
 
     //outputFile << "Energy after : " << correctedEnergy <<  " ; " << std::endl;
 
@@ -728,7 +753,8 @@ namespace sdhcal_content
             file << "Layer : " <<pCaloHit->GetLayer()+30 << "; Pseudo layer : " << pCaloHit->GetPseudoLayer() << std::endl;
             if(fabs(m_sdhcalThresholds.at(0) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             { 
-              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              //initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              initialBarrelHadronic+=0.0367023;
               if(pCaloHit->GetPseudoLayer() == (pCaloHit->GetLayer()+30)) //If pseudolayer!=layer+30, means the hit is in the other block
                 firstNHadronicHit1++;
               else
@@ -736,7 +762,8 @@ namespace sdhcal_content
             }
             else if(fabs(m_sdhcalThresholds.at(1) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
-              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              //initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              initialBarrelHadronic+=0.0745279;
               if(pCaloHit->GetPseudoLayer() == (pCaloHit->GetLayer()+30)) //If pseudolayer!=layer+30, means the hit is in the other block
                 firstNHadronicHit2++;
               else
@@ -744,7 +771,8 @@ namespace sdhcal_content
             }
             else if(fabs(m_sdhcalThresholds.at(2) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             {
-              initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              //initialBarrelHadronic+=pCaloHit->GetInputEnergy();
+              initialBarrelHadronic+=0.363042;
               if(pCaloHit->GetPseudoLayer() == (pCaloHit->GetLayer()+30)) //If pseudolayer!=layer+30, means the hit is in the other block
                 firstNHadronicHit3++;
               else
@@ -779,9 +807,17 @@ namespace sdhcal_content
     NHadronicHit2 = this->GetCorrectedHitNumber(firstNHadronicHit2, clusterCosPhi) + this->GetCorrectedHitNumber(secondNHadronicHit2, clusterCosPhiPrime);
     NHadronicHit3 = this->GetCorrectedHitNumber(firstNHadronicHit3, clusterCosPhi) + this->GetCorrectedHitNumber(secondNHadronicHit3, clusterCosPhiPrime);
 
-    const float correctedBarrelEnergy(NHadronicHit1*m_sdhcalThresholds.at(0) + NHadronicHit2*m_sdhcalThresholds.at(1) + NHadronicHit3*m_sdhcalThresholds.at(2)); //New barrel hadronic energy
-
-    correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
+    if(m_sdhcalThresholds.at(0) != 1) //Test if we use semidigital thresholds
+    {
+      const float correctedBarrelEnergy(NHadronicHit1*m_sdhcalThresholds.at(0) + NHadronicHit2*m_sdhcalThresholds.at(1) + NHadronicHit3*m_sdhcalThresholds.at(2)); //New barrel hadronic energy
+      correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
+    }
+    else
+    {
+      const float correctedBarrelEnergy(NHadronicHit1*0.0367023 + NHadronicHit2*0.0745279 + NHadronicHit3*0.363042);
+      correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
+    }
+    
 
     //outputFile << "Energy after : " << correctedEnergy <<  " ; " << std::endl;
 

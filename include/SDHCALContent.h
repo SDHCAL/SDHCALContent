@@ -69,7 +69,7 @@ inline pandora::StatusCode SDHCALContent::RegisterEnergyCorrections(const pandor
       "AnalogicEnergyFunction", pandora::HADRONIC, new sdhcal_content::AnalogicEnergyFunction()));
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
-      "AnalogicEnergyFunction", pandora::ELECTROMAGNETIC, new sdhcal_content::AnalogicEnergyFunction()));
+      "AnalogicEnergyFunction", pandora::ELECTROMAGNETIC, new sdhcal_content::AnalogicEnergyFunction())); 
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
       "BarrelGapEnergyFunction", pandora::HADRONIC, new sdhcal_content::BarrelGapEnergyFunction())); */
