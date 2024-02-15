@@ -316,6 +316,60 @@ namespace sdhcal_content
   //------------------------------------------------------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------------------------------------------------------
 
+  /**
+   *  @brief  AngleCorrectionPlugin class
+   */
+  class AngleCorrectionPlugin : public pandora::EnergyCorrectionPlugin
+  {
+  public:
+    /**
+     *  @brief  Default constructor
+     */
+    AngleCorrectionPlugin();
+
+    /**
+     *  @brief  Make energy correction on this given cluster
+     *
+     *  @param  pCluster the cluster address to correct the energy
+     *  @param  correctedEnergy the energy to correct
+     */
+    pandora::StatusCode MakeEnergyCorrections(const pandora::Cluster *const pCluster, float &correctedEnergy) const;
+
+    /**
+     *  @brief  Read settings from the xml handle
+     *
+     *  @param  xmlHandle the xml handle to read settings from
+     */
+    pandora::StatusCode ReadSettings(const pandora::TiXmlHandle xmlHandle);
+
+  private:
+    /**
+     *  @brief  Get cos phi with respect to y axis in the XY-plane
+     */
+    float GetCosPhi(const pandora::Cluster *const pCluster) const;
+
+    /**
+     *  @brief  Get cos theta with respect to z axis
+     */
+    float GetCosTheta(const pandora::Cluster *const pCluster) const;
+
+    /**
+     *  @brief  Get the number of new hits created by the correction
+     *
+     *  @param  nHit The number of hits to correct
+     *  @param  cosOrSinAngle The cluster cos or sin of the angle
+     */
+    float GetCorrectedHitNumber(int nHit, float cosOrSinAngle) const;
+
+
+  private:
+    float             m_lowEnergyCut;       ///< The energy cut under which the cluster energy wont be corrected
+    bool              m_useDigi;            ///< Boolean to choose if you use digi collections or not
+  };
+
+  //------------------------------------------------------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      *   @brief  CleanCluster class. Correct cluster energy by searching for constituent calo hits with anomalously high energy.
      *           Corrections are made by examining the energy in adjacent layers of the cluster.

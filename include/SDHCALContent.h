@@ -82,6 +82,9 @@ inline pandora::StatusCode SDHCALContent::RegisterEnergyCorrections(const pandor
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
       "PhiNHitVideau", pandora::HADRONIC, new sdhcal_content::PhiNHitVideau));
+    
+  PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
+      "AngleCorrectionPlugin", pandora::HADRONIC, new sdhcal_content::AngleCorrectionPlugin));
 
   PANDORA_RETURN_RESULT_IF(pandora::STATUS_CODE_SUCCESS, !=, PandoraApi::RegisterEnergyCorrectionPlugin(pandora,
       "SDHCALCleanClusters", pandora::HADRONIC, new sdhcal_content::CleanCluster));
