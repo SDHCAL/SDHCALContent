@@ -563,9 +563,6 @@ namespace sdhcal_content
 
     float initialBarrelHadronic = 0;
 
-    std::ofstream file("/scratch/pasquier/HitLayer.txt", std::ios::app);
-    file << "Début d'un nouveau cluster : " << std::endl;
-
     if(pCluster->GetNCaloHits() == 0)
       return pandora::STATUS_CODE_SUCCESS;
 
@@ -586,7 +583,6 @@ namespace sdhcal_content
         {
           if(pCaloHit->GetHitRegion() == pandora::BARREL)
           {
-            file << "Layer : " <<pCaloHit->GetLayer() << "; Pseudo layer : " << pCaloHit->GetPseudoLayer() << std::endl;
             if(fabs(m_sdhcalThresholds.at(0) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             { 
               barrelNHadronicHit1++;
@@ -638,10 +634,6 @@ namespace sdhcal_content
       const float correctedBarrelEnergy(NHadronicHit1*0.0367023 + NHadronicHit2*0.0745279 + NHadronicHit3*0.363042);
       correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
     }
-
-    //outputFile << "Energy after : " << correctedEnergy <<  " ; " << std::endl;
-
-    file.close();
 
     return pandora::STATUS_CODE_SUCCESS;
   }
@@ -727,9 +719,6 @@ namespace sdhcal_content
 
     float initialBarrelHadronic = 0;
 
-    //std::ofstream file("/scratch/pasquier/HitLayer.txt", std::ios::app);
-    //file << "Début d'un nouveau cluster : " << std::endl;
-
     if(pCluster->GetNCaloHits() == 0)
       return pandora::STATUS_CODE_SUCCESS;
 
@@ -750,7 +739,6 @@ namespace sdhcal_content
         {
           if(pCaloHit->GetHitRegion() == pandora::BARREL)
           {
-            //file << "Layer : " <<pCaloHit->GetLayer()+30 << "; Pseudo layer : " << pCaloHit->GetPseudoLayer() << std::endl;
             if(fabs(m_sdhcalThresholds.at(0) - pCaloHit->GetInputEnergy()) < std::numeric_limits<float>::epsilon())
             { 
               //initialBarrelHadronic+=pCaloHit->GetInputEnergy();
@@ -817,11 +805,6 @@ namespace sdhcal_content
       const float correctedBarrelEnergy(NHadronicHit1*0.0367023 + NHadronicHit2*0.0745279 + NHadronicHit3*0.363042);
       correctedEnergy += correctedBarrelEnergy; //Compute the corrected energy
     }
-    
-
-    //outputFile << "Energy after : " << correctedEnergy <<  " ; " << std::endl;
-
-    //file.close();
 
     return pandora::STATUS_CODE_SUCCESS;
   }
