@@ -52,9 +52,6 @@ CHECK_PACKAGE_LIBS( SDHCALContent SDHCALContent )
 
 
 
-# ---------- libraries dependencies -------------------------------------------
-# this sets SDHCALContent_${COMPONENT}_LIB_DEPENDS variables
-INCLUDE( "${SDHCALContent_ROOT}/lib/cmake/SDHCALContentLibDeps.cmake" )
  
 
 
