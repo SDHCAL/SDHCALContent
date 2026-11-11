@@ -2,7 +2,7 @@
 # cmake file for building SDHCALContent framework
 # @author Eté Rémi ,IPNL
 # Copyright (c) CNRS / IPNL
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8.2 FATAL_ERROR )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.10 FATAL_ERROR )
 #################################################
 
 # project name
